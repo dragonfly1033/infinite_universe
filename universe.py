@@ -66,8 +66,9 @@ class Universe:
                 sectorY = (self.cY + cursor_y)//self.sector_size
                 self.seed = sectorY << 16 | abs(sectorX+360)
                 if self.lehmer(0,15) == 0:
-                    colour = (self.lehmer(0,256), self.lehmer(0,256), self.lehmer(0,256))
-                    print(colour)
+                    self.callback(2, self.seed)
+                    
+                    
     
     def game_loop(self):
         keys = pg.key.get_pressed()
