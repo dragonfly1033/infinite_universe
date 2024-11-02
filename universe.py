@@ -14,6 +14,8 @@ class System:
         self.y = y
         self.radius = radius
         self.screen = screen
+        self.nSectorX = self.WIDTH//self.sector_size
+        self.nSectorY = self.HEIGHT//self.sector_size
 
     def plot(self):
         pg.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
@@ -43,11 +45,10 @@ class Universe:
 
 
     def universeScreenSetup(self):
-        nSectorX = self.WIDTH//self.sector_size
-        nSectorY = self.HEIGHT//self.sector_size
+        
         self.universeScreen.fill((0,0,0))
-        for y in range(nSectorY):
-            for x in range(nSectorX):
+        for y in range(self.nSectorY):
+            for x in range(self.nSectorX):
                 sectorX = (self.cX//self.sector_size) + x
                 sectorY = (self.cY//self.sector_size) + y 
                 px = sectorX*self.sector_size - self.cX
