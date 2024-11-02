@@ -24,14 +24,12 @@ active_screen = None
 run = True
 while run:
     dt = clock.tick(60)
-    if active_screen is None:
-        continue
 
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
         
-        active_screen.event_loop(event) 
+        active_screen.event_loop(event, dt) 
 
     active_screen.game_loop()
 
