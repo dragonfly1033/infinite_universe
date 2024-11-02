@@ -6,8 +6,6 @@ font = pg.font.Font(None, 36)
 clock = pg.time.Clock()
 display = pg.display.set_mode((1920, 1080))
 
-syllables = ["ba", "zo", "gu", "ra", "mi", "lu", "fi", "pa"]
-
 class System:
     def __init__(self, name, color, x, y, radius, screen):
         self.name = name
@@ -54,12 +52,11 @@ class Universe:
                 sectorY = (self.cY//self.sector_size) + y 
                 px = sectorX*self.sector_size - self.cX
                 py = sectorY*self.sector_size - self.cY
-                self.seed = sectorY << 16 | abs(sectorX+360)
+                self.seed = sectorY << 32 | abs(sectorX+360)
                 if self.lehmer(0,15) == 0:
                     colour = (self.lehmer(0,256), self.lehmer(0,256), self.lehmer(0,256))
                     r = self.lehmer(5,(self.sector_size-1)//2)
-                    name = ''.join([syllables[self.lehmer(0,len(syllables))] for i in range(self.lehmer(3,7))])
-                    new = System(name, colour, px+(self.sector_size//2), py+(self.sector_size//2), r, self.universeScreen)
+                    new = System(colour, px+(self.sector_size//2), py+(self.sector_size//2), r, self.universeScreen)
                     new.plot()
         coord = font.render(f'({self.cX},{self.cY})', False, (255,255,255))
         self.universeScreen.blit(coord, (0,0))
@@ -72,35 +69,23 @@ class Universe:
             pass
     
     def game_loop(self):
-        self.universeScreenSetup()
-        run = True
-        while run:
-            for event in pg.event.get():
-                if event.type == pg.QUIT:
-                    run = False
-
-            keys = pg.key.get_pressed()
-            if keys[pg.K_LSHIFT]:
-                tempVel = self.vel*2
-            elif keys[pg.K_LCTRL]:
-                tempVel = self.vel//4
-            if keys[pg.K_w]:
-                self.cY -= tempVel
-                self.universeScreenSetup()
-            if keys[pg.K_a]:
-                self.cX -= tempVel
-                self.universeScreenSetup()
-            if keys[pg.K_s]:
-                self.cY += tempVel
-                self.universeScreenSetup()
-            if keys[pg.K_d]:
-                self.cX += tempVel
-                self.universeScreenSetup()
-
-
-            clock.tick(60)
-            display.blit(self.universeScreen, (0, 0))
-            pg.display.update()
+        keys = pg.key.get_pressed()
+        if keys[pg.K_LSHIFT]:
+            tempVel = self.vel*2
+        elif keys[pg.K_LCTRL]:
+            tempVel = self.vel//4
+        if keys[pg.K_w]:
+            self.cY -= tempVel
+            self.universeScreenSetup()
+        if keys[pg.K_a]:
+            self.cX -= tempVel
+            self.universeScreenSetup()
+        if keys[pg.K_s]:
+            self.cY += tempVel
+            self.universeScreenSetup()
+        if keys[pg.K_d]:
+            self.cX += tempVel
+            self.universeScreenSetup()
 
         pg.quit()
         quit()
