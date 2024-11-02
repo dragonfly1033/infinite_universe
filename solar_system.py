@@ -15,6 +15,7 @@ class SunType(Enum):
     M = {"colour": (255,159, 70), "radius": 5}
 
 
+
 class SolarSystem:
     def __init__(self, W, H):
         self.size = Vec(W, H)
