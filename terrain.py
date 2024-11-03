@@ -18,17 +18,17 @@ pg.display.set_caption("TerrainGen")
 
 
 points = []
-rows = 20 # so 11 sets of points
-cols = 20 # so 5 sets of point
+rows = 80 # so 11 sets of points
+cols = 80 # so 5 sets of point
 
 the = 0
-fov = 90
-noise = PerlinNoise(octaves=2)
+fov = 45
+noise = PerlinNoise(octaves=4)
 # noise = np.vectorize(noise)
 
 for row in range(0, rows + 1) : # as each row has row+1 lines
     for col in range(0, cols + 1): # as each column has column+1 lines
-        x_val = -1 + col * 2/(cols)
+        x_val = -4 + col * 8/(cols)
         z_val = 1 - row * 2/(rows)
         y_val = noise((row/rows, col/cols))
         points.append([x_val, y_val, z_val, 1])
@@ -82,7 +82,7 @@ def getProjection(xtheta, ytheta, ztheta, fov):
     ])
 
     a = HEIGHT/WIDTH # aspect ratio
-    f = 1/math.tan(math.pi/180 * fov/2) # getting angle to screen
+    f = math.tan((math.pi/180) * fov/2) # getting angle to screen
     zfar = -20 # furthest can see
     znear = 0.2 # closest can see
     q = zfar/(zfar - znear) # part of projection matrix, to simplify later on
@@ -94,10 +94,9 @@ def getProjection(xtheta, ytheta, ztheta, fov):
         [0, 0, -q*znear, 0]
     ])
 
-    # rotation_matrix = np.matmul(np.matmul(rotation_matrix_x, rotation_matrix_y), rotation_matrix_z)
-    # projection_matrix = np.matmul(rotation_matrix, show_matrix)
+    rotation_matrix = np.matmul(np.matmul(rotation_matrix_x, rotation_matrix_y), rotation_matrix_z)
+    projection_matrix = np.matmul(rotation_matrix, show_matrix)
 
-    projection_matrix = show_matrix
     return projection_matrix
 
 def project_3d_to_2d(points_3d, projection_matrix, xMov, yMov, zMov):
