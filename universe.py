@@ -1,6 +1,5 @@
 import pygame as pg
 
-
 class System:
     def __init__(self, color, x, y, radius, screen):
         self.color = color
@@ -8,7 +7,7 @@ class System:
         self.y = y
         self.radius = radius
         self.screen = screen
-        
+
     def plot(self):
         pg.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
@@ -26,8 +25,7 @@ class Universe:
         self.universeScreen = pg.Surface((self.WIDTH, self.HEIGHT))
         self.nSectorX = self.WIDTH//self.sector_size
         self.nSectorY = self.HEIGHT//self.sector_size
-        
-        
+      
 
     def lehmer(self, low, high):
         self.seed += 0xe120fc15
@@ -36,7 +34,6 @@ class Universe:
         tmp = m1 * 0x12fad5c9
         m2 = (tmp >> 32) ^ tmp
         return m2%(high-low) + low
-
 
 
     def setup(self):
@@ -54,7 +51,6 @@ class Universe:
                     r = self.lehmer(5,(self.sector_size-1)//2)
                     new = System(colour, px+(self.sector_size//2), py+(self.sector_size//2), r, self.universeScreen)
                     new.plot()
-
         
 
     def event_loop(self, event, dt):
@@ -78,6 +74,9 @@ class Universe:
             tempVel = self.vel*2
         elif keys[pg.K_LCTRL]:
             tempVel = self.vel//4
+        else:
+            tempVel = self.vel
+
         if keys[pg.K_w]:
             self.cY -= tempVel
             self.setup()

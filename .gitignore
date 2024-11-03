@@ -2,3 +2,7 @@
 .vscode/*
 venv/
 venv/*
+pypyvenv/
+pypyvenv/*
+__pycache__/
+__pycache__/*
