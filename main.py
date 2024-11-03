@@ -2,10 +2,11 @@ import pygame as pg
 from enum import Enum
 import random
 from universe import Universe
+from solar_system import GalaxyScreen
 
 class ScreenType(Enum):
     Universe = 1
-    SolarSystem = 2
+    Galaxy = 2
     Planet = 3
 
 
@@ -25,6 +26,8 @@ random.seed(global_seed)
 
 universe_screen = Universe(ScreenType.Universe, global_seed, W, H)
 universe_screen.setup()
+
+galaxy_screen = GalaxyScreen(global_seed, W, H)
 
 active_screen = universe_screen
 
