@@ -31,8 +31,6 @@ Colour *hslToRgb(double h, double s, double l) {
   s /= 100.0f;
   l /= 100.0f;
 
-  printf("%f, %f, %f\n", h, s, l);
-
   if (s < 0.00001f) {
     r = g = b = l; // achromatic
   } else {
@@ -50,7 +48,7 @@ Colour *hslToRgb(double h, double s, double l) {
   return ret;
 }
 
-int *get_image(int r, int res, int *ret, int seed, int *cols) {
+int *get_image(int r, int res, int *ret, int seed) {
     // int *ret = calloc(sizeof(int), 12*r*r+12*r+3);
     // float *ret = malloc(12*r*r+6*r+3);
 
@@ -67,14 +65,6 @@ int *get_image(int r, int res, int *ret, int seed, int *cols) {
     int col_g2 = col2->b;
     int col_b2 = col2->c;
     free(col2);
-
-    cols[0] = col_r1;
-    cols[1] = col_g1;
-    cols[2] = col_b1;
-    cols[3] = col_r2;
-    cols[4] = col_g2;
-    cols[5] = col_b2;
-
 
     for (int j = 0; j < res; j++) {
         for (int i = 0; i < res; i++) {
