@@ -19,24 +19,19 @@ pg.display.set_caption("TerrainGen")
 points = []
 rows = 4
 cols = 3
-xMultiplier = WIDTH / cols
-yMultiplier = HEIGHT / rows
-xOffset = xMultiplier / 2
-yOffset = yMultiplier / 2
 
 the = 0
 fov = 15
 
-for y in range(0, rows) :
-    for x in range(0, cols):
-        # points.append([x * xMultiplier + xOffset ,y * yMultiplier + yOffset, random.randint(-1,1) -20*y , 1])
-        # points.append([x * xMultiplier + xOffset , random.randint(-20,20) + HEIGHT , -y * yMultiplier - yOffset, 1])
-
-        x_val = -1 + x * 2/(cols-1)
-        y_val = (random.random() * 2 - 1) * 0.2
+for row in range(0, rows + 1) : # as each row has row+1 lines
+    for col in range(0, cols + 1): # as each column has column+1 lines
+        x_val = -1 + row * 2/(cols)
+        # y_val = (random.random() * 2 - 1) * 0.2
         y_val = -0.5
-        z_val = -1 + y * 2/(rows-1)
+        z_val = -1 + col * 2/(rows)
+
         points.append([x_val, y_val, z_val])
+
 points_3d = np.array(points)
 
 print("\ninitial points : ")
@@ -96,13 +91,14 @@ def getProjection(xtheta, ytheta, ztheta, fov):
 
 def project_3d_to_2d(points_3d, projection_matrix):
     npoints = points_3d.copy() # copying to then do below
-    # npoints[:, 2] -= 1 # subtracting 1 from each value so can have camera at (0,0,0) and everything else around
     npoints = npoints.T # transposing so can matrix multiply
 
     result = np.matmul(projection_matrix, npoints).T # multiplying then transposing again to get form wanted
+
      # dividing each element by 3rd value to get correct projected x,y vals, if z is zero then does'nt divide
     divisors = result[:, 2][:, np.newaxis]
     projected_points_2d = np.where(divisors != 0, result / divisors, result)
+    
     projected_points_2d = projected_points_2d[:, :-2] # discarding last two elements of each array
 
     return projected_points_2d
@@ -142,8 +138,8 @@ def drawPoints():
     # points_2d = points_3d
 
     pg.draw.circle(screen, "blue", getCoords(2,2), 9)
-    for row in range(0, rows) : # cols - 1 as will then need to find point next and below
-        for col in range(0, cols): # rows - 1
+    for row in range(0, rows + 1) : # cols - 1 as will then need to find point next and below
+        for col in range(0, cols + 1): # rows - 1
             point = getCoords(col, row)
             # point_to_right = getCoords(i + 1, j)
             # point_to_bottom = getCoords(i, j + 1)
