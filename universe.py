@@ -1,16 +1,5 @@
 import pygame as pg
 
-class System:
-    def __init__(self, color, x, y, radius, screen):
-        self.color = color
-        self.x = x
-        self.y = y
-        self.radius = radius
-        self.screen = screen
-
-    def plot(self):
-        pg.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
-
 class Universe:
     def __init__(self, type, seed, W, H, callback):
         self.callback = callback
@@ -37,7 +26,7 @@ class Universe:
 
 
     def setup(self):
-        
+
         self.universeScreen.fill((0,0,0))
         for y in range(self.nSectorY):
             for x in range(self.nSectorX):
@@ -49,8 +38,8 @@ class Universe:
                 if self.lehmer(0,15) == 0:
                     colour = (self.lehmer(0,256), self.lehmer(0,256), self.lehmer(0,256))
                     r = self.lehmer(5,(self.sector_size-1)//2)
-                    new = System(colour, px+(self.sector_size//2), py+(self.sector_size//2), r, self.universeScreen)
-                    new.plot()
+                    pg.draw.circle(self.universeScreen, colour, (px+(self.sector_size//2), py+(self.sector_size//2)), r)
+                    
         
 
     def event_loop(self, event, dt):

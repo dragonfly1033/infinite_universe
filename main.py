@@ -12,7 +12,16 @@ class ScreenType(Enum):
 pg.init()
 
 def change_screen(screen_type, seed):
-    pass
+    global active_screen
+
+    if screen_type == ScreenType.Universe:
+        active_screen = universe_screen
+    elif screen_type == ScreenType.Galaxy:
+        active_screen = galaxy_screen
+    elif screen_type == ScreenType.Planet:
+        active_screen = planet_screen
+    else:
+        raise Exception("Unknown screen type.")
 
 W, H = 1880, 1000
 display = pg.display.set_mode((W, H))
