@@ -12,7 +12,8 @@ class System:
         pg.draw.circle(self.screen, self.color, (self.x, self.y), self.radius)
 
 class Universe:
-    def __init__(self, type, seed, W, H):
+    def __init__(self, type, seed, W, H, callback):
+        self.callback = callback
         self.type = type
         self.WIDTH = W
         self.HEIGHT = H
@@ -24,7 +25,7 @@ class Universe:
         self.universeScreen = pg.Surface((self.WIDTH, self.HEIGHT))
         self.nSectorX = self.WIDTH//self.sector_size
         self.nSectorY = self.HEIGHT//self.sector_size
-        
+      
 
     def lehmer(self, low, high):
         self.seed += 0xe120fc15
@@ -33,7 +34,6 @@ class Universe:
         tmp = m1 * 0x12fad5c9
         m2 = (tmp >> 32) ^ tmp
         return m2%(high-low) + low
-
 
 
     def setup(self):
@@ -54,12 +54,21 @@ class Universe:
         
 
     def event_loop(self, event, dt):
-        if event.type == pg.KEYDOWN:
-            # if event.key == pg.K_a
-            pass
+        if event.type == pg.MOUSEBUTTONDOWN:
+            if event.button == 1:
+                print(event.pos)
+                cursor_x, cursor_y = event.pos
+                sectorX = (self.cX + cursor_x)//self.sector_size
+                sectorY = (self.cY + cursor_y)//self.sector_size
+                self.seed = sectorY << 16 | abs(sectorX+360)
+                if self.lehmer(0,15) == 0:
+                    self.callback(2, self.seed)
+                    
+                    
     
     def game_loop(self):
         keys = pg.key.get_pressed()
+        tempVel = self.vel
 
         if keys[pg.K_LSHIFT]:
             tempVel = self.vel*2

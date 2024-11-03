@@ -9,13 +9,10 @@ class ScreenType(Enum):
     Galaxy = 2
     Planet = 3
 
-
 pg.init()
 
-
-def switch_screen_callback(new_screen_type, seed):
+def change_screen(screen_type, seed):
     pass
-
 
 W, H = 1880, 1000
 display = pg.display.set_mode((W, H))
@@ -24,7 +21,7 @@ global_seed = 27
 
 random.seed(global_seed)
 
-universe_screen = Universe(ScreenType.Universe, global_seed, W, H)
+universe_screen = Universe(ScreenType.Universe, global_seed, W, H, change_screen)
 universe_screen.setup()
 
 galaxy_screen = GalaxyScreen(global_seed, W, H)
@@ -38,7 +35,10 @@ while run:
     for event in pg.event.get():
         if event.type == pg.QUIT:
             run = False
-        
+        if event.type == pg.KEYDOWN:
+            if event.key == pg.K_q:
+                run = False
+                
         active_screen.event_loop(event, dt) 
 
     active_screen.game_loop()
